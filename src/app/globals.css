@@ -1,0 +1,343 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   FOREST & SAND — palette
+   ========================================================================== */
+@theme {
+  --color-forest: #0c1f1a;
+  --color-forest-deep: #071411;
+  --color-surface: #122c25;
+  --color-surface-2: #17372e;
+  --color-line: #1f463b;
+  --color-sand: #f0eadf;
+  --color-sand-dim: #cfc7b8;
+  --color-muted: #8fa79b;
+  --color-mint: #5fd9a6;
+  --color-mint-deep: #2fa87a;
+  --color-amber: #d9a05b;
+
+  --font-display: var(--font-display), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+* {
+  min-width: 0;
+}
+
+html {
+  background-color: var(--color-forest);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-forest);
+  color: var(--color-sand);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-mint);
+  color: var(--color-forest-deep);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-forest-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-mint-deep);
+}
+
+/* ==========================================================================
+   Typography helpers
+   ========================================================================== */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Split-text primitives — GSAP animates .line-inner / .word-inner */
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.word-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Prevent flash of un-animated content before GSAP boots */
+[data-anim]:not(.anim-ready) {
+  visibility: hidden;
+}
+
+/* ==========================================================================
+   Decorative
+   ========================================================================== */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+}
+
+.hairline {
+  border-top: 1px solid var(--color-line);
+}
+
+.glow-mint {
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklab, var(--color-mint) 26%, transparent) 0%,
+    transparent 68%
+  );
+}
+
+.glow-amber {
+  background: radial-gradient(
+    circle at center,
+    color-mix(in oklab, var(--color-amber) 20%, transparent) 0%,
+    transparent 68%
+  );
+}
+
+/* Fine grid backdrop */
+.grid-lines {
+  background-image: linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-line) 55%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-line) 55%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 20%, transparent 78%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 20%, transparent 78%);
+}
+
+/* Link underline that wipes in */
+.link-wipe {
+  position: relative;
+  display: inline-block;
+}
+.link-wipe::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.link-wipe:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ==========================================================================
+   Pinned case studies — short-viewport fit
+   The pin is h-100svh with overflow:hidden, so any panel taller than the
+   viewport is silently clipped (and the last panel with it). Browser zoom
+   shrinks the CSS viewport, which is how this bites on large monitors.
+   Tighten progressively instead of losing content.
+   ========================================================================== */
+@media (min-width: 768px) and (max-height: 840px) {
+  .work-panel .panel-kind {
+    margin-top: 1rem;
+  }
+  .work-panel .panel-title {
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+    margin-top: 0.5rem;
+  }
+  .work-panel .panel-summary {
+    margin-top: 0.85rem;
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+  .work-panel .panel-features {
+    margin-top: 1.1rem;
+  }
+  .work-panel .panel-features > li + li {
+    margin-top: 0.4rem;
+  }
+  .work-panel .panel-features > li {
+    font-size: 0.8125rem;
+  }
+  .work-panel .panel-stack {
+    margin-top: 1.1rem;
+  }
+  .work-panel .panel-actions {
+    margin-top: 1.2rem;
+  }
+  .work-progress-rail {
+    padding-top: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) and (max-height: 660px) {
+  .work-panel .panel-kind {
+    margin-top: 0.6rem;
+  }
+  .work-panel .panel-title {
+    font-size: clamp(1.35rem, 2.8vw, 2rem);
+    margin-top: 0.35rem;
+  }
+  .work-panel .panel-summary {
+    margin-top: 0.6rem;
+    font-size: 0.8125rem;
+  }
+  .work-panel .panel-features {
+    margin-top: 0.75rem;
+  }
+  .work-panel .panel-features > li + li {
+    margin-top: 0.25rem;
+  }
+  .work-panel .panel-features > li {
+    font-size: 0.75rem;
+  }
+  .work-panel .panel-stack {
+    margin-top: 0.75rem;
+  }
+  .work-panel .panel-actions {
+    margin-top: 0.85rem;
+  }
+  .work-panel .panel-actions a {
+    padding-block: 0.5rem;
+  }
+  .work-progress-rail {
+    padding-top: 0.75rem;
+  }
+}
+
+/* ==========================================================================
+   Cartoon mascot
+   ========================================================================== */
+
+/* The flying copy handles both slots; static copies only exist for reduced motion. */
+.cartoon-static {
+  display: none;
+}
+
+.c-float {
+  animation: cartoonFloat 4.2s ease-in-out infinite;
+}
+@keyframes cartoonFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-13px);
+  }
+}
+
+.c-arm {
+  transform-box: view-box;
+  transform-origin: 264px 344px;
+  animation: cartoonWave 3.6s ease-in-out infinite;
+}
+@keyframes cartoonWave {
+  0%,
+  58%,
+  100% {
+    transform: rotate(0deg);
+  }
+  66% {
+    transform: rotate(-16deg);
+  }
+  74% {
+    transform: rotate(5deg);
+  }
+  82% {
+    transform: rotate(-13deg);
+  }
+}
+
+.c-eyes {
+  transform-box: view-box;
+  transform-origin: 200px 212px;
+  animation: cartoonBlink 5.6s ease-in-out infinite;
+}
+@keyframes cartoonBlink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  94%,
+  96% {
+    transform: scaleY(0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartoon-static {
+    display: block;
+  }
+  .cartoon-flight {
+    display: none !important;
+  }
+
+  [data-anim]:not(.anim-ready) {
+    visibility: visible;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
