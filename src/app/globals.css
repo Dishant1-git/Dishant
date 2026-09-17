@@ -263,6 +263,38 @@ html.lenis body {
 }
 
 /* ==========================================================================
+   Marquee
+   ========================================================================== */
+
+/* Four identical groups sit side by side; sliding the track by -50% lands
+   group 3 exactly where group 1 started, so the loop is seamless. */
+.mq-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  will-change: transform;
+  animation: mqScroll var(--mq-duration, 34s) linear infinite;
+}
+
+/* Skew lives on the groups so it never fights the track's keyframed transform. */
+.mq-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  transform: skewX(var(--mq-skew, 0deg));
+  transition: transform 0.45s ease-out;
+}
+
+@keyframes mqScroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* ==========================================================================
    Cartoon mascot
    ========================================================================== */
 
@@ -333,6 +365,11 @@ html.lenis body {
 
   [data-anim]:not(.anim-ready) {
     visibility: visible;
+  }
+
+  .mq-track {
+    animation: none !important;
+    transform: none !important;
   }
   *,
   *::before,

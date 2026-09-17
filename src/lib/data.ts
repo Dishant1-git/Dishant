@@ -162,6 +162,14 @@ export const stack = [
     items: ["Node.js", "Express.js", "REST APIs", "JWT Auth", "Middleware"],
   },
   {
+    group: "Realtime",
+    items: ["WebSockets", "Socket.IO", "Live Presence", "Event Streams"],
+  },
+  {
+    group: "AI Integration",
+    items: ["RAG Pipelines", "LLM APIs", "Embeddings", "Vector Search", "Prompt Design"],
+  },
+  {
     group: "Database",
     items: ["MongoDB", "Mongoose", "Schema Design", "Aggregation"],
   },
@@ -205,6 +213,8 @@ export const marqueeWords = [
   "REST APIs",
   "JWT",
   "Mongoose",
+  "WebSockets",
+  "RAG",
   "Vite",
   "Git",
 ];

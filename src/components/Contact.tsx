@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { gsap, useGsap, revealWords, prefersReducedMotion } from "@/lib/anim";
 import { profile } from "@/lib/data";
 import Magnetic from "./Magnetic";
+import ContactForm from "./ContactForm";
 
 const openTo = ["Full-time roles", "Freelance projects", "Collaborations"];
 
@@ -122,6 +123,21 @@ export default function Contact() {
               GitHub ↗
             </a>
           </Magnetic>
+        </div>
+
+        <div className="ct-fade border-line mt-20 border-t pt-14 md:mt-24">
+          <div className="grid gap-10 md:grid-cols-12">
+            <div className="md:col-span-4">
+              <p className="label">Or send a message</p>
+              <p className="text-sand-dim mt-4 max-w-xs text-[15px] leading-relaxed">
+                Straight to my inbox. The more you tell me about the project, the
+                timeline and the stack, the more useful my first reply will be.
+              </p>
+            </div>
+            <div className="md:col-span-8">
+              <ContactForm />
+            </div>
+          </div>
         </div>
       </div>
     </section>

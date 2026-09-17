@@ -58,7 +58,8 @@ export default function Stack() {
       <div className="mx-auto max-w-[1400px]">
         <SectionHeading index="03" label="Capabilities" title="The toolkit" />
 
-        <div className="mt-16 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Six groups: two clean rows of three from lg up, pairs below that. */}
+        <div className="mt-16 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {stack.map((group) => (
             <div key={group.group} className="stack-col">
               <div className="flex items-baseline justify-between">
