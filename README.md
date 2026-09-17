@@ -9,19 +9,15 @@ npm run dev
 
 ## Contact form
 
-The contact form in the Contact section posts to [Web3Forms](https://web3forms.com),
-so there is no backend to run or deploy.
+The contact form posts to [Web3Forms](https://web3forms.com) — no backend to run
+or deploy, and no environment variables to configure.
 
-1. Enter your email at [web3forms.com](https://web3forms.com) and confirm it.
-2. Paste the access key it sends you into `.env.local`:
+The access key is `ACCESS_KEY` at the top of
+`src/components/ContactForm.tsx`. It is public by design: it only permits
+posting to the inbox it belongs to, and it is served to every visitor in the
+client bundle either way. To point the form at a different inbox, get a key at
+[web3forms.com](https://web3forms.com), confirm the email, and replace that
+constant.
 
-   ```
-   NEXT_PUBLIC_WEB3FORMS_KEY=your-access-key
-   ```
-
-3. Add the same variable in the Vercel project settings (Settings → Environment
-   Variables) and redeploy.
-
-The key is public by design — it only allows posting to your own inbox. Without
-it the form still works: submissions fall back to opening the visitor's mail
-client with the message pre-filled.
+Note this is not a pattern to reuse for real secrets — anything that must stay
+private belongs on the server, not in a client component.

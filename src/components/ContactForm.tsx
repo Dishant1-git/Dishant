@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { profile } from "@/lib/data";
 
-/* Web3Forms access keys are designed to live in client-side markup — the key
-   only authorises posting to this one inbox, so NEXT_PUBLIC_ is correct here. */
-const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY ?? "";
+/* Web3Forms access keys are public by design: this one only authorises posting
+   to the inbox it belongs to, and it is served to every visitor in the client
+   bundle no matter where it is stored. Do not copy this pattern for a real
+   secret — anything that must stay private belongs on the server. */
+const ACCESS_KEY = "cb96f9a1-ecd0-4a25-a0d7-424eb9677ba6";
 const ENDPOINT = "https://api.web3forms.com/submit";
 
 type Status = "idle" | "sending" | "sent" | "error";
@@ -20,15 +21,6 @@ function validate(values: Record<Field, string>): Errors {
   if (!EMAIL_RE.test(values.email.trim())) errors.email = "That address doesn't look right.";
   if (values.message.trim().length < 10) errors.message = "A little more detail, please.";
   return errors;
-}
-
-/* No key configured yet — hand the message to the visitor's mail client rather
-   than failing silently, so the form is never a dead end. */
-function mailtoFallback(values: Record<Field, string>) {
-  const body = `${values.message}\n\n— ${values.name} (${values.email})`;
-  window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(
-    `Portfolio enquiry from ${values.name}`,
-  )}&body=${encodeURIComponent(body)}`;
 }
 
 const fieldClass =
@@ -59,12 +51,6 @@ export default function ContactForm() {
     const firstBad = (["name", "email", "message"] as Field[]).find((f) => found[f]);
     if (firstBad) {
       form.querySelector<HTMLElement>(`[name="${firstBad}"]`)?.focus();
-      return;
-    }
-
-    if (!ACCESS_KEY) {
-      mailtoFallback(values);
-      setNote("Opening your email app — the message is pre-filled.");
       return;
     }
 
