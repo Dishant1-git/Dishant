@@ -1,10 +1,19 @@
 "use client";
 
+import Image from "next/image";
 import type { CaseStudy } from "@/lib/data";
 
-/** Abstract wireframe standing in for each build — no fake screenshots. */
+/** Abstract wireframe standing in for each build — no fake screenshots. A study
+ *  with `image` set shows its real brand mark in the same frame instead. */
 export default function ProjectVisual({ study }: { study: CaseStudy }) {
   const accent = study.accent === "mint" ? "var(--color-mint)" : "var(--color-amber)";
+
+  const glow = (
+    <div
+      className="pointer-events-none absolute -top-1/4 left-1/2 h-[120%] w-[70%] -translate-x-1/2 opacity-40 blur-2xl"
+      style={{ background: `radial-gradient(circle, ${accent}55, transparent 65%)` }}
+    />
+  );
 
   return (
     <div className="pv-frame border-line bg-forest-deep/70 relative w-full overflow-hidden rounded-md border">
@@ -18,12 +27,29 @@ export default function ProjectVisual({ study }: { study: CaseStudy }) {
         </span>
       </div>
 
-      {/* skeleton layout */}
+      {study.image ? (
+        <div className="relative aspect-[16/10]">
+          {glow}
+          <Image
+            src={study.image}
+            alt={
+              study.imageKind === "screenshot"
+                ? `Screenshot of ${study.title}`
+                : `${study.title} logo`
+            }
+            fill
+            sizes="(max-width: 768px) 90vw, 45vw"
+            /* A screenshot is the page content, so it sits flush inside the
+               chrome; a logo needs room around it or it reads as a banner. */
+            className={`relative object-contain ${
+              study.imageKind === "screenshot" ? "" : "p-10 sm:p-14"
+            }`}
+          />
+        </div>
+      ) : (
+      /* skeleton layout */
       <div className="relative aspect-[16/10] p-4 sm:p-6">
-        <div
-          className="pointer-events-none absolute -top-1/4 left-1/2 h-[120%] w-[70%] -translate-x-1/2 opacity-40 blur-2xl"
-          style={{ background: `radial-gradient(circle, ${accent}55, transparent 65%)` }}
-        />
+        {glow}
 
         <div className="relative flex h-full gap-4">
           {/* sidebar */}
@@ -86,6 +112,7 @@ export default function ProjectVisual({ study }: { study: CaseStudy }) {
           </div>
         </div>
       </div>
+      )}
 
       {/* index watermark */}
       <span

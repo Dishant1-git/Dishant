@@ -34,6 +34,10 @@ export type CaseStudy = {
   stack: string[];
   repo?: string;
   live?: string;
+  /** Image in /public. Replaces the abstract wireframe when set. */
+  image?: string;
+  /** A logo gets breathing room around it; a screenshot fills the frame. */
+  imageKind?: "logo" | "screenshot";
   accent: "mint" | "amber";
 };
 
@@ -55,6 +59,8 @@ export const caseStudies: CaseStudy[] = [
     stack: ["React", "Node.js", "Express", "MongoDB", "JWT"],
     repo: "https://github.com/Dishant1-git/Ecom-new",
     live: "https://ecom-new-rosy.vercel.app",
+    image: "/bakery.png",
+    imageKind: "logo",
     accent: "mint",
   },
   {
@@ -91,6 +97,8 @@ export const caseStudies: CaseStudy[] = [
     ],
     stack: ["React", "Node.js", "Express", "MongoDB"],
     repo: "https://github.com/Dishant1-git/Job-Portal",
+    image: "/job-portal.png",
+    imageKind: "screenshot",
     accent: "mint",
   },
   {
